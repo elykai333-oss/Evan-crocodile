@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>鳄鱼城</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            background: #f4f1e8;
+            color: #222;
+        }
+
+        header {
+            background: #1f3b2c;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        header p {
+            margin-top: 8px;
+        }
+
+        .book {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
+        .chapter-title {
+            font-size: 28px;
+            color: #1f3b2c;
+            margin-bottom: 25px;
+        }
+
+        .story {
+            font-size: 19px;
+            line-height: 2;
+        }
+
+        .story p {
+            text-indent: 2em;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            position: sticky;
+            bottom: 0;
+
+            background: white;
+
+            padding: 15px;
+
+            border-top: 1px solid #ddd;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            background: #1f3b2c;
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2d5942;
+        }
+
+        .progress-box {
+            max-width: 850px;
+
+            margin: 15px auto;
+
+            padding: 0 20px;
+        }
+
+        .progress {
+            height: 8px;
+
+            background: #ddd;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            width: 0%;
+
+            background: #1f3b2c;
+
+            transition: width 0.3s;
+        }
+
+        .save-text {
+            text-align: center;
+
+            font-size: 13px;
+
+            color: #777;
+
+            margin-top: 8px;
+        }
+
+        body.dark {
+            background: #171717;
+
+            color: #ddd;
+        }
+
+        body.dark .book,
+        body.dark .controls {
+            background: #242424;
+        }
+
+        body.dark .chapter-title {
+            color: #9bd3ad;
+        }
+
+        body.dark header {
+            background: #111;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>🐊 鳄鱼城</h1>
+
+    <p>《鳄鱼城》小说</p>
+
+</header>
+
+
+<div class="progress-box">
+
+    <div class="progress">
+
+        <div
+            class="progress-bar"
+            id="progressBar">
+        </div>
+
+    </div>
+
+    <div
+        class="save-text"
+        id="saveText">
+        阅读进度：正在加载……
+    </div>
+
+</div>
+
+
+<main class="book">
+
+
+    <h2
+        class="chapter-title"
+        id="chapterTitle">
+        第一章
+    </h2>
+
+
+    <div
+        class="story"
+        id="story">
+    </div>
+
+
+</main>
+
+
+<div class="controls">
+
+    <button onclick="previousChapter()">
+        ◀ 上一章
+    </button>
+
+    <button onclick="nextChapter()">
+        下一章 ▶
+    </button>
+
+    <button onclick="startReading()">
+        🔊 自动朗读
+    </button>
+
+    <button onclick="pauseReading()">
+        ⏸ 暂停
+    </button>
+
+    <button onclick="stopReading()">
+        ⏹ 停止
+    </button>
+
+    <button onclick="toggleDarkMode()">
+        🌙 夜间模式
+    </button>
+
+</div>
+
+
+<script>
+
+
+/* ==================================================
+   《鳄鱼城》
+   这里是60章故事模板
+   ================================================== */
+
+
+const chapters = [
+
+    {
+        title: "第一章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第六章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第七章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第八章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第九章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十一章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十二章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十三章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十四章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十五章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十六章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十七章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十八章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第十九章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十一章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十二章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十三章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十四章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十五章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十六章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十七章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十八章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第二十九章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十一章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十二章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十三章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十四章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十五章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十六章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十七章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十八章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第三十九章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十一章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十二章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十三章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十四章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十五章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十六章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十七章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十八章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第四十九章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十一章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十二章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十三章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十四章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十五章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十六章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十七章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十八章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第五十九章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    },
+
+    {
+        title: "第六十章",
+        text: `
+        把故事放这里
+
+        c
+        `
+    }
+
+];
+
+
+
+/* ==================================================
+   当前章节
+   ================================================== */
+
+let currentChapter = 0;
+
+
+
+/* ==================================================
+   显示章节
+   ================================================== */
+
+function showChapter() {
+
+    document.getElementById("chapterTitle").textContent =
+        chapters[currentChapter].title;
+
+
+    const story =
+        document.getElementById("story");
+
+
+    const paragraphs =
+        chapters[currentChapter].text
+        .trim()
+        .split("\n");
+
+
+    story.innerHTML = "";
+
+
+    paragraphs.forEach(text => {
+
+        if (text.trim() !== "") {
+
+            const p =
+                document.createElement("p");
+
+            p.textContent =
+                text.trim();
+
+            story.appendChild(p);
+        }
+
+    });
+
+
+    updateProgress();
+
+    saveProgress();
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+/* ==================================================
+   下一章
+   ================================================== */
+
+function nextChapter() {
+
+    if (
+        currentChapter <
+        chapters.length - 1
+    ) {
+
+        currentChapter++;
+
+        stopReading();
+
+        showChapter();
+    }
+
+}
+
+
+
+/* ==================================================
+   上一章
+   ================================================== */
+
+function previousChapter() {
+
+    if (currentChapter > 0) {
+
+        currentChapter--;
+
+        stopReading();
+
+        showChapter();
+    }
+
+}
+
+
+
+/* ==================================================
+   自动保存
+   ================================================== */
+
+function saveProgress() {
+
+    localStorage.setItem(
+        "crocodileCityChapter",
+        currentChapter
+    );
+
+
+    localStorage.setItem(
+        "crocodileCityScroll",
+        window.scrollY
+    );
+
+
+    document.getElementById(
+        "saveText"
+    ).textContent =
+        "✓ 阅读进度已自动保存";
+
+}
+
+
+
+/* ==================================================
+   读取以前的进度
+   ================================================== */
+
+function loadProgress() {
+
+    const savedChapter =
+        localStorage.getItem(
+            "crocodileCityChapter"
+        );
+
+
+    const savedScroll =
+        localStorage.getItem(
+            "crocodileCityScroll"
+        );
+
+
+    if (savedChapter !== null) {
+
+        currentChapter =
+            parseInt(savedChapter);
+    }
+
+
+    showChapter();
+
+
+    if (savedScroll !== null) {
+
+        setTimeout(() => {
+
+            window.scrollTo(
+                0,
+                parseInt(savedScroll)
+            );
+
+        }, 300);
+
+    }
+
+}
+
+
+
+/* ==================================================
+   滚动时自动保存
+   ================================================== */
+
+window.addEventListener(
+    "scroll",
+    function() {
+
+        localStorage.setItem(
+            "crocodileCityScroll",
+            window.scrollY
+        );
+
+
+        updateProgress();
+
+    }
+);
+
+
+
+/* ==================================================
+   阅读进度条
+   ================================================== */
+
+function updateProgress() {
+
+    const scrollTop =
+        window.scrollY;
+
+
+    const documentHeight =
+        document.documentElement.scrollHeight -
+        window.innerHeight;
+
+
+    let percent = 0;
+
+
+    if (documentHeight > 0) {
+
+        percent =
+            (scrollTop /
+            documentHeight) * 100;
+
+    }
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        percent + "%";
+
+}
+
+
+
+/* ==================================================
+   自动朗读
+   ================================================== */
+
+function startReading() {
+
+    speechSynthesis.cancel();
+
+
+    const text =
+        chapters[currentChapter].text;
+
+
+    const speech =
+        new SpeechSynthesisUtterance(text);
+
+
+    speech.lang =
+        "zh-CN";
+
+
+    speech.rate =
+        0.9;
+
+
+    speech.pitch =
+        1;
+
+
+    speech.onend =
+        function() {
+
+            if (
+                currentChapter <
+                chapters.length - 1
+            ) {
+
+                currentChapter++;
+
+                showChapter();
+
+                startReading();
+
+            }
+
+        };
+
+
+    speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+
+/* ==================================================
+   暂停朗读
+   ================================================== */
+
+function pauseReading() {
+
+    speechSynthesis.pause();
+
+}
+
+
+
+/* ==================================================
+   停止朗读
+   ================================================== */
+
+function stopReading() {
+
+    speechSynthesis.cancel();
+
+}
+
+
+
+/* ==================================================
+   夜间模式
+   ================================================== */
+
+function toggleDarkMode() {
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+
+    const dark =
+        document.body.classList.contains(
+            "dark"
+        );
+
+
+    localStorage.setItem(
+        "crocodileCityDark",
+        dark
+    );
+
+}
+
+
+
+/* ==================================================
+   启动
+   ================================================== */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        const dark =
+            localStorage.getItem(
+                "crocodileCityDark"
+            );
+
+
+        if (dark === "true") {
+
+            document.body.classList.add(
+                "dark"
+            );
+
+        }
+
+
+        loadProgress();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
