@@ -101,6 +101,14 @@
         button:hover {
             background: #2d5942;
         }
+        #menu{
+    display:none;
+    text-align:center;
+}
+
+#menu.show{
+    display:block;
+}
 
         .progress-box {
             max-width: 850px;
@@ -217,30 +225,16 @@
 
 <div class="controls">
 
-    <button onclick="previousChapter()">
-        ◀ 上一章
-    </button>
+    <button onclick="toggleMenu()">...</button>
 
-    <button onclick="nextChapter()">
-        下一章 ▶
-    </button>
-
-    <button onclick="startReading()">
-        🔊 自动朗读
-    </button>
-
-    <button onclick="pauseReading()">
-        ⏸ 暂停
-    </button>
-
-    <button onclick="stopReading()">
-        ⏹ 停止
-    </button>
-
-    <button onclick="toggleDarkMode()">
-        🌙 夜间模式
-    </button>
-
+<div id="menu">
+    <button onclick="previousChapter()">⬅ 上一章</button>
+    <button onclick="nextChapter()">下一章 ➡</button>
+    <button onclick="speak()">🔊 自动读</button>
+    <button onclick="pauseReading()">⏸️ 暂停</button>
+    <button onclick="resumeReading()">▶️ 继续</button>
+    <button onclick="toggleDark()">🌙 夜间模式</button>
+</div>
 </div>
 
 
@@ -997,6 +991,11 @@ let currentChapter = 0;
 /* ==================================================
    显示章节
    ================================================== */
+function toggleMenu(){
+
+    document.getElementById("menu").classList.toggle("show");
+
+}
 
 function showChapter() {
 
@@ -1289,12 +1288,17 @@ function pauseReading() {
    停止朗读
    ================================================== */
 
-function stopReading() {
+function pauseReading(){
 
-    speechSynthesis.cancel();
+    speechSynthesis.pause();
 
 }
 
+function resumeReading(){
+
+    speechSynthesis.resume();
+
+}
 
 
 /* ==================================================
