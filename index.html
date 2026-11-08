@@ -80,17 +80,21 @@ header p {
 }
 
 .menu-button {
-    width: 100%;
-    margin-top: 15px;
-    padding: 12px;
-    font-size: 18px;
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    margin: 0;
+    padding: 10px;
+    font-size: 22px;
     border: none;
-    border-radius: 10px;
+    border-radius: 15px;
     background: #234b38;
     color: white;
     cursor: pointer;
+    z-index: 1000;
 }
-
 button {
     padding: 10px 14px;
     margin: 5px;
@@ -108,10 +112,13 @@ button:hover {
 
 #menu {
     display: none;
+    position: fixed;
+    bottom: 75px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
     text-align: center;
-    margin-top: 10px;
 }
-
 #menu.show {
     display: block;
 }
