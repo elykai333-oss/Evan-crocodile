@@ -1633,184 +1633,35 @@ function toggleMenu() {
    ================================================== */
 
 let currentSpeech = null;
-let speechParts = [];
-let speechIndex = 0;
-let isReading = false;
 
 
-function startReading() {
 function startReading() {
 
     speechSynthesis.cancel();
+
 
     const text =
         chapters[currentChapter].text;
 
-    speechParts =
-        text.split(/(?<=[。！？；\n])/);
 
-    speechIndex = 0;
+    currentSpeech =
+        new SpeechSynthesisUtterance(text);
 
-    isReading = true;
 
-    readNextPart();
+    currentSpeech.lang =
+        "zh-CN";
 
-}
 
+    currentSpeech.rate =
+        0.9;
 
-function readNextPart() {
 
-    if (!isReading) {
-        return;
-    }
+    currentSpeech.pitch =
+        1;
 
-    if (speechIndex >= speechParts.length) {
 
-        if (
-            currentChapter <
-            chapters.length - 1
-        ) {
+    currentSpeech.onend =
+        function() {
 
-            currentChapter++;
-
-            showChapter();
-
-            speechParts =
-                chapters[currentChapter].text
-                .split(/(?<=[。！？；\n])/);
-
-            speechIndex = 0;
-
-            readNextPart();
-
-        } else {
-
-            isReading = false;
-
-        }
-
-        return;
-    }
-
-
-    const speech =
-        new SpeechSynthesisUtterance(
-            speechParts[speechIndex]
-        );
-
-    speech.lang = "zh-CN";
-
-    speech.rate = 0.9;
-
-    speech.pitch = 1;
-
-
-    speech.onend = function() {
-
-        if (isReading) {
-
-            speechIndex++;
-
-            readNextPart();
-
-        }
-
-    };
-
-
-    speechSynthesis.speak(speech);
-
-}
-
-
-/* ==================================================
-   暂停
-   ================================================== */
-
-function pauseReading() {
-
-    isReading = false;
-
-    speechSynthesis.cancel();
-
-}
-
-/* ==================================================
-   继续
-   ================================================== */
-
-function resumeReading() {
-
-    if (
-        speechParts.length > 0 &&
-        speechIndex < speechParts.length
-    ) {
-
-        isReading = true;
-
-        speechSynthesis.cancel();
-
-        readNextPart();
-
-    }
-
-}
-/* ==================================================
-   夜间模式
-   ================================================== */
-
-function toggleDarkMode() {
-
-    document.body.classList.toggle(
-        "dark"
-    );
-
-
-    const dark =
-        document.body.classList.contains(
-            "dark"
-        );
-
-
-    localStorage.setItem(
-        "crocodileCityDark",
-        dark
-    );
-
-}
-
-
-/* ==================================================
-   启动
-   ================================================== */
-
-window.addEventListener(
-    "load",
-    function() {
-
-        const dark =
-            localStorage.getItem(
-                "crocodileCityDark"
-            );
-
-
-        if (dark === "true") {
-
-            document.body.classList.add(
-                "dark"
-            );
-
-        }
-
-
-        showChapter();
-
-    }
-);
-
-</script>
-
-
-</body>
-
-</html>
+            if (
+                cur
