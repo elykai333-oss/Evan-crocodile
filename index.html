@@ -1692,7 +1692,9 @@ function startReading() {
 
 function pauseReading() {
 
-    speechSynthesis.pause();
+    if (speechSynthesis.speaking) {
+        speechSynthesis.pause();
+    }
 
 }
 
@@ -1703,10 +1705,11 @@ function pauseReading() {
 
 function resumeReading() {
 
-    speechSynthesis.resume();
+    if (speechSynthesis.paused) {
+        speechSynthesis.resume();
+    }
 
 }
-
 
 /* ==================================================
    夜间模式
