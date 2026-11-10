@@ -1633,55 +1633,92 @@ function toggleMenu() {
    ================================================== */
 
 let currentSpeech = null;
+let speechParts = [];
+let speechIndex = 0;
+let isReading = false;
 
 
+function startReading() {
 function startReading() {
 
     speechSynthesis.cancel();
 
-
     const text =
         chapters[currentChapter].text;
 
+    speechParts =
+        text.split(/(?<=[。！？；\n])/);
 
-    currentSpeech =
-        new SpeechSynthesisUtterance(text);
+    speechIndex = 0;
 
+    isReading = true;
 
-    currentSpeech.lang =
-        "zh-CN";
+    readNextPart();
 
-
-    currentSpeech.rate =
-        0.9;
-
-
-    currentSpeech.pitch =
-        1;
+}
 
 
-    currentSpeech.onend =
-        function() {
+function readNextPart() {
 
-            if (
-                currentChapter <
-                chapters.length - 1
-            ) {
+    if (!isReading) {
+        return;
+    }
 
-                currentChapter++;
+    if (speechIndex >= speechParts.length) {
 
-                showChapter();
+        if (
+            currentChapter <
+            chapters.length - 1
+        ) {
 
-                startReading();
+            currentChapter++;
 
-            }
+            showChapter();
 
-        };
+            speechParts =
+                chapters[currentChapter].text
+                .split(/(?<=[。！？；\n])/);
+
+            speechIndex = 0;
+
+            readNextPart();
+
+        } else {
+
+            isReading = false;
+
+        }
+
+        return;
+    }
 
 
-    speechSynthesis.speak(
-        currentSpeech
-    );
+    const speech =
+        new SpeechSynthesisUtterance(
+            speechParts[speechIndex]
+        );
+
+    speech.lang = "zh-CN";
+
+    speech.rate = 0.9;
+
+    speech.pitch = 1;
+
+
+    speech.onend = function() {
+
+        if (isReading) {
+
+            speechIndex++;
+
+            readNextPart();
+
+        }
+
+    };
+
+
+    speechSynthesis.speak(speech);
 
 }
 
@@ -1692,12 +1729,11 @@ function startReading() {
 
 function pauseReading() {
 
-    if (speechSynthesis.speaking) {
-        speechSynthesis.pause();
-    }
+    isReading = false;
+
+    speechSynthesis.cancel();
 
 }
-
 
 /* ==================================================
    继续
@@ -1705,12 +1741,20 @@ function pauseReading() {
 
 function resumeReading() {
 
-    if (speechSynthesis.paused) {
-        speechSynthesis.resume();
+    if (
+        speechParts.length > 0 &&
+        speechIndex < speechParts.length
+    ) {
+
+        isReading = true;
+
+        speechSynthesis.cancel();
+
+        readNextPart();
+
     }
 
 }
-
 /* ==================================================
    夜间模式
    ================================================== */
